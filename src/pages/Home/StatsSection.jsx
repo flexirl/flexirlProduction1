@@ -1,0 +1,347 @@
+import React, { useEffect, useRef, useState } from "react";
+import a from "/images/a.jpg";
+import b from "/images/ab.png";
+
+const StatsSection = () => {
+  const sectionRef = useRef(null);
+  const startedRef = useRef(false);
+  const rafIdsRef = useRef([]);
+  const autoRotateRef = useRef(null);
+  const lastInteractionRef = useRef(Date.now());
+
+  const [clientsCount, setClientsCount] = useState(0);
+  const [reviewsCount, setReviewsCount] = useState(0);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [usersCount, setUsersCount] = useState(0);
+
+  // Bay Window Carousel State
+  const [isDragging, setIsDragging] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [dragStart, setDragStart] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  const rotationTargetRef = useRef(0);
+  const velocityRef = useRef(0);
+  const rafRef = useRef(null);
+
+  // Project images
+  const projectImages = [a, b, a, b, a, b, a, b, a, b, a, b];
+
+  const getBgPosition = (index) => {
+    const wrappedRotation = (((rotation - 50 - index * 36) % 360) + 360) % 360;
+    return `${100 - (wrappedRotation / 360) * 800}px 0px`;
+  };
+
+  // Auto-rotation
+  const startAutoRotation = () => {
+    if (autoRotateRef.current) return;
+    autoRotateRef.current = setInterval(() => {
+      const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
+      if (timeSinceLastInteraction > 2000 && !isDragging) {
+        setRotation((prev) => prev + 0.15);
+      }
+    }, 16);
+  };
+
+  const stopAutoRotation = () => {
+    if (autoRotateRef.current) {
+      clearInterval(autoRotateRef.current);
+      autoRotateRef.current = null;
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    setDragStart(clientX);
+    setIsDragging(true);
+    lastInteractionRef.current = Date.now();
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const deltaX = (clientX - dragStart) * 0.35;
+    rotationTargetRef.current -= deltaX;
+    velocityRef.current = -deltaX;
+    setDragStart(clientX);
+    lastInteractionRef.current = Date.now();
+    if (e.touches && e.cancelable) e.preventDefault();
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    lastInteractionRef.current = Date.now();
+  };
+
+  // Counter animation
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const animateValue = (setter, from, to, duration, formatFn) => {
+      // cancel any previous rafs for safety
+      const start = performance.now();
+      const localIds = [];
+      const step = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const value = from + (to - from) * progress;
+        setter(formatFn ? formatFn(value) : Math.floor(value));
+        if (progress < 1) {
+          const id = requestAnimationFrame(step);
+          localIds.push(id);
+          rafIdsRef.current.push(id);
+        } else {
+          setter(formatFn ? formatFn(to) : to);
+        }
+      };
+      const id = requestAnimationFrame(step);
+      localIds.push(id);
+      rafIdsRef.current.push(id);
+      return () => {
+        localIds.forEach((i) => cancelAnimationFrame(i));
+      };
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // replay animation every time section enters the viewport
+            startedRef.current = true;
+
+            // clear any residual RAFs
+            rafIdsRef.current.forEach((i) => cancelAnimationFrame(i));
+            rafIdsRef.current = [];
+
+            // reset counts before animating
+            setClientsCount(0);
+            setReviewsCount(0);
+            setRatingValue(0);
+            setUsersCount(0);
+
+            // Animate counters
+            animateValue(setClientsCount, 0, 60, 1200, (v) => Math.floor(v));
+            animateValue(setReviewsCount, 0, 450, 1400, (v) => Math.floor(v));
+            animateValue(setRatingValue, 0, 9.8, 1200, (v) =>
+              Number(v.toFixed(1))
+            );
+            animateValue(setUsersCount, 0, 500, 1600, (v) => Math.floor(v));
+          } else {
+            // when leaving viewport, reset flags so it can replay on re-entry
+            startedRef.current = false;
+            // cancel any animations
+            rafIdsRef.current.forEach((i) => cancelAnimationFrame(i));
+            rafIdsRef.current = [];
+            // reset counters to zero for consistent replay
+            setClientsCount(0);
+            setReviewsCount(0);
+            setRatingValue(0);
+            setUsersCount(0);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      rafIdsRef.current.forEach((i) => cancelAnimationFrame(i));
+      rafIdsRef.current = [];
+    };
+  }, []);
+
+  // Event listeners
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => handleMouseMove(e);
+    const handleGlobalMouseUp = () => handleMouseUp();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleGlobalMouseMove);
+      document.addEventListener("mouseup", handleGlobalMouseUp);
+      document.addEventListener("touchmove", handleGlobalMouseMove, {
+        passive: false,
+      });
+      document.addEventListener("touchend", handleGlobalMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleGlobalMouseMove);
+      document.removeEventListener("mouseup", handleGlobalMouseUp);
+      document.removeEventListener("touchmove", handleGlobalMouseMove);
+      document.removeEventListener("touchend", handleGlobalMouseUp);
+    };
+  }, [isDragging, dragStart]);
+
+  // Smooth animation loop (lerp + inertia + idle auto-rotate)
+  useEffect(() => {
+    const animate = () => {
+      const idle =
+        Date.now() - lastInteractionRef.current > 2000 && !isDragging;
+      if (idle) rotationTargetRef.current += 0.1;
+      if (!isDragging) {
+        rotationTargetRef.current += velocityRef.current;
+        velocityRef.current *= 0.9;
+        if (Math.abs(velocityRef.current) < 0.001) velocityRef.current = 0;
+      }
+      setRotation((prev) => prev + (rotationTargetRef.current - prev) * 0.15);
+      rafRef.current = requestAnimationFrame(animate);
+    };
+    rafRef.current = requestAnimationFrame(animate);
+    return () => rafRef.current && cancelAnimationFrame(rafRef.current);
+  }, [isDragging]);
+
+  return (
+    <section ref={sectionRef} className="w-full bg-[#183942] py-12 lg:py-20">
+      <div className="  max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header & description */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="h-px w-24 bg-[#ffffff7c] mx-auto mb-6" />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight">
+            Projects To Stare
+          </h2>
+          <p className="mt-6 text-sm sm:text-base md:text-lg text-white/90 leading-relaxed">
+            We create the most stunning graphic designs for your social media,
+            websites, branding, or literally anything. They are just
+            mindblowing.
+          </p>
+        </div>
+
+        {/* Simple Bay Window Carousel */}
+        <div className="mb-16 w-full flex justify-center">
+          <div
+            className="relative"
+            style={{
+              perspective: "1700px",
+              width:
+                window.matchMedia &&
+                window.matchMedia("(max-width: 1400px)").matches
+                  ? "min(800px, 100vw)"
+                  : "min(530px, 100vw)",
+              height:
+                window.matchMedia &&
+                window.matchMedia("(max-width: 1400px)").matches
+                  ? "min(360px, 70vh)"
+                  : "min(450px, 60vh)",
+              WebkitMaskImage:
+                "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
+              maskImage:
+                "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
+            }}
+          >
+            <div
+              className={`w-full h-full relative ${isDragging ? "cursor-grabbing" : "cursor-grab"} transition-transform duration-100 ease-out`}
+              style={{
+                transformStyle: "preserve-3d",
+                transform: `rotateY(${rotation}deg)`,
+              }}
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleMouseDown}
+            >
+              {projectImages.map((image, index) => {
+                const isMobile =
+                  window.matchMedia &&
+                  window.matchMedia("(max-width: 768px)").matches;
+                const angleStep = isMobile ? 32 : 36; // mobile increased gap; preserve previous desktop angle
+                const angle = index * -angleStep;
+                const z = isMobile ? -420 : -650;
+                const originZ = isMobile ? 200 : 100;
+                const scale = isMobile ? 0.94 : 1;
+                return (
+                  <div
+                    key={index}
+                    className={`absolute inset-0 transition-opacity duration-300 ease-out rounded-lg overflow-hidden shadow-md
+                      ${hoveredIndex !== null ? (hoveredIndex === index ? "opacity-100" : "opacity-70") : "opacity-100"}
+                    `}
+                    style={{
+                      transformStyle: "preserve-3d",
+                      transform: `rotateY(${angle}deg) translateZ(${z}px) scale(${scale})`,
+                      transformOrigin: `50% 50% ${originZ}px`,
+                      backgroundImage: `url(${image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: getBgPosition(index),
+                      backfaceVisibility: "hidden",
+                    }}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Stats area */}
+        <div className="bg-transparent">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+            {/* Left: descriptive text */}
+            <div className="lg:col-span-2 order-1 lg:order-1">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white leading-tight">
+                <span className="font-medium">Our</span>
+                <span className="font-semibold"> Impacts</span>
+                <span className="text-[#ef4b6e]">.</span>
+              </h3>
+
+              <p className="mt-6 text-sm sm:text-base md:text-lg text-white/90 leading-relaxed">
+                We are a UI UX design agency, Data-driven digital product design
+                &amp; technology firm that transforms business. Flexirl focuses
+                on human-centered UI/UX Design, UX Research, Web and mobile app
+                development — offering end-to-end services that your users will
+                love.
+              </p>
+            </div>
+
+            {/* Right: numeric stats */}
+            <div className="lg:col-span-3 order-2 lg:order-2 mt-6 lg:mt-0">
+              <div className="grid grid-cols-2 gap-8 lg:gap-12">
+                <div className="flex flex-col items-start text-left">
+                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#b1eeff] leading-none">
+                    {clientsCount}
+                    <span className="text-2xl sm:text-3xl md:text-4xl">+</span>
+                  </div>
+                  <div className="mt-3 text-sm sm:text-base text-white/80 font-medium">
+                    Clients
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-start text-left">
+                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#b1eeff] leading-none">
+                    {reviewsCount}
+                    <span className="text-2xl sm:text-3xl md:text-4xl">+</span>
+                  </div>
+                  <div className="mt-3 text-sm sm:text-base text-white/80 font-medium">
+                    Positive Reviews
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-start text-left">
+                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#b1eeff] leading-none">
+                    {ratingValue}
+                    <span className="text-2xl sm:text-3xl md:text-4xl">+</span>
+                  </div>
+                  <div className="mt-3 text-sm sm:text-base text-white/80 font-medium">
+                    Rating Out of 10
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-start text-left">
+                  <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#b1eeff] leading-none">
+                    {usersCount}
+                    <span className="text-2xl sm:text-3xl md:text-4xl">+</span>
+                  </div>
+                  <div className="mt-3 text-sm sm:text-base text-white/80 font-medium">
+                    Users Satisfied
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default StatsSection;

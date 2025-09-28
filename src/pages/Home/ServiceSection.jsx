@@ -1,6 +1,6 @@
 import React from "react";
 import girl from "/images/girl.png";
-import reddot from "/images/reddot.svg";
+
 import Stackcard from "./Stackcard";
 import ScrollText from "../../components/ui/ScrollText";
 import arrow from "/images/arrowservices.svg";

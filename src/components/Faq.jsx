@@ -1,7 +1,7 @@
 import Button from "./ui/Button";
 import React, { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 
 const FAQSection = () => {
   const [expandedFAQ, setExpandedFAQ] = useState(null);
@@ -9,33 +9,57 @@ const FAQSection = () => {
   const faqs = [
     {
       id: 0,
-      question: "How fast is same-day delivery?",
+      question: "What services does Flexirl specialize in?",
       answer:
-        "Same-day delivery typically takes 4-8 hours depending on your location and order time.",
+        "We specialize primarily in website and mobile app development, creating custom solutions for businesses of all sizes. We also offer complementary digital marketing services including SEO, social media marketing, and PPC to help promote your digital products.",
     },
     {
       id: 1,
-      question: "Is it expensive to offer same-day delivery?",
+      question: "What types of websites and apps do you develop?",
       answer:
-        "Our same-day delivery rates are competitive and vary based on distance and package size.",
+        "We develop a wide range of digital solutions including responsive websites, e-commerce platforms, web applications, iOS and Android mobile apps, progressive web apps (PWAs), and custom software solutions tailored to your business needs.",
     },
     {
       id: 2,
-      question: "Where are these fulfilment centers located?",
+      question: "How long does it take to develop a website or app?",
       answer:
-        "We have fulfillment centers strategically located in major cities across the country.",
+        "Development timelines vary based on complexity. Simple websites take 2-4 weeks, while complex web applications and mobile apps typically require 8-16 weeks. We'll provide a detailed timeline during your consultation.",
     },
     {
       id: 3,
-      question: "How will customers be able to choose this delivery option?",
+      question: "Do you work with small businesses or only large enterprises?",
       answer:
-        "Customers can select same-day delivery during checkout if available in their area.",
+        "We work with businesses of all sizes, from startups needing their first website to large enterprises requiring complex application development. Our solutions are scalable and tailored to fit your budget and requirements.",
     },
     {
       id: 4,
-      question: "How can I get Localli?",
+      question: "What technologies do you use for development?",
       answer:
-        "You can sign up for Localli through our website or mobile app to get started.",
+        "We use modern, industry-standard technologies including React, React Native, Node.js, Python, PHP, and various database solutions. We choose the best tech stack based on your project requirements and long-term goals.",
+    },
+    {
+      id: 5,
+      question: "Do you provide ongoing maintenance and support?",
+      answer:
+        "Yes, we offer comprehensive maintenance and support packages including regular updates, security patches, bug fixes, and feature enhancements. We ensure your website or app continues to perform optimally after launch.",
+    },
+    {
+      id: 6,
+      question: "Can you help with both design and development?",
+      answer:
+        "Absolutely! We provide end-to-end services from initial concept and UI/UX design to full development and deployment. Our team handles everything to bring your vision to life with a seamless user experience.",
+    },
+    {
+      id: 7,
+      question: "What is your pricing structure for development projects?",
+      answer:
+        "Our pricing depends on project complexity, features, and timeline. We offer fixed-price packages for standard projects and hourly rates for custom development. Contact us for a free consultation and detailed quote.",
+    },
+    {
+      id: 8,
+      question: "How do I get started with my development project?",
+      answer:
+        "Getting started is simple! Contact us to schedule a free consultation where we'll discuss your requirements, goals, and vision. We'll then provide a detailed proposal with timeline and pricing for your project.",
     },
   ];
 
@@ -58,7 +82,7 @@ const FAQSection = () => {
                   </h2>
                   <p className="text-[16px] sm:text-[18px] md:text-[20px] font-normal leading-[19px] sm:leading-[21px] md:leading-[23px] text-left text-[#939393] font-syne w-full lg:w-[66%] mt-[10px]">
                     Discover answers to the most commonly asked questions about
-                    us
+                    our development services
                   </p>
                 </div>
 
@@ -70,7 +94,9 @@ const FAQSection = () => {
                         <button
                           onClick={() => toggleFAQ(faq?.id)}
                           className={`flex justify-between items-center w-full text-left p-3 ${
-                            expandedFAQ === faq?.id ? "bg-white" : "bg-transparent"
+                            expandedFAQ === faq?.id
+                              ? "bg-white"
+                              : "bg-transparent"
                           } border-b border-gray-300`}
                           aria-expanded={expandedFAQ === faq?.id}
                         >
@@ -89,10 +115,10 @@ const FAQSection = () => {
                           {expandedFAQ === faq?.id && (
                             <motion.div
                               initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
+                              animate={{ height: "auto", opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.36, ease: 'easeOut' }}
-                              style={{ overflow: 'hidden' }}
+                              transition={{ duration: 0.36, ease: "easeOut" }}
+                              style={{ overflow: "hidden" }}
                             >
                               <div className="mt-2 p-3 sm:p-4 bg-white">
                                 <p className="text-[14px] sm:text-[16px] font-normal leading-[18px] sm:leading-[20px] text-gray-700">

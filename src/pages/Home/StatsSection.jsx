@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import a from "/images/a.jpg";
 import b from "/images/ab.png";
-//import c from "/images/abc.png";
 import d from "/images/abc.png";
 import e from "/images/abcd.png";
 import f from "/images/abcdef.png";
@@ -11,7 +11,6 @@ const StatsSection = () => {
   const sectionRef = useRef(null);
   const startedRef = useRef(false);
   const rafIdsRef = useRef([]);
-  const autoRotateRef = useRef(null);
   const lastInteractionRef = useRef(Date.now());
 
   const [clientsCount, setClientsCount] = useState(0);
@@ -24,36 +23,25 @@ const StatsSection = () => {
   const [rotation, setRotation] = useState(0);
   const [dragStart, setDragStart] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const rotationTargetRef = useRef(0);
   const velocityRef = useRef(0);
   const rafRef = useRef(null);
 
   // Project images
-  const projectImages = [d, a, g, f, e, d, a, f, d, g, e, a, d];
+  const projectImages = [d, a, g, f, e, b, d, a, f, d, g, e, a, d]; // Your project images with duplicates
 
-  const getBgPosition = (index) => {
-    const wrappedRotation = (((rotation - 50 - index * 36) % 360) + 360) % 360;
-    return `${100 - (wrappedRotation / 360) * 800}px 0px`;
-  };
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
 
-  // Auto-rotation
-  const startAutoRotation = () => {
-    if (autoRotateRef.current) return;
-    autoRotateRef.current = setInterval(() => {
-      const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
-      if (timeSinceLastInteraction > 2000 && !isDragging) {
-        setRotation((prev) => prev + 0.3);
-      }
-    }, 26);
-  };
-
-  const stopAutoRotation = () => {
-    if (autoRotateRef.current) {
-      clearInterval(autoRotateRef.current);
-      autoRotateRef.current = null;
-    }
-  };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleMouseDown = (e) => {
     e.preventDefault();
@@ -67,7 +55,7 @@ const StatsSection = () => {
     if (!isDragging) return;
 
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const deltaX = (clientX - dragStart) * 0.35;
+    const deltaX = (clientX - dragStart) * (isMobile ? 0.5 : 0.35);
     rotationTargetRef.current -= deltaX;
     velocityRef.current = -deltaX;
     setDragStart(clientX);
@@ -86,7 +74,6 @@ const StatsSection = () => {
     if (!el) return;
 
     const animateValue = (setter, from, to, duration, formatFn) => {
-      // cancel any previous rafs for safety
       const start = performance.now();
       const localIds = [];
       const step = (now) => {
@@ -113,20 +100,16 @@ const StatsSection = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // replay animation every time section enters the viewport
             startedRef.current = true;
 
-            // clear any residual RAFs
             rafIdsRef.current.forEach((i) => cancelAnimationFrame(i));
             rafIdsRef.current = [];
 
-            // reset counts before animating
             setClientsCount(0);
             setReviewsCount(0);
             setRatingValue(0);
             setUsersCount(0);
 
-            // Animate counters
             animateValue(setClientsCount, 0, 60, 1200, (v) => Math.floor(v));
             animateValue(setReviewsCount, 0, 450, 1400, (v) => Math.floor(v));
             animateValue(setRatingValue, 0, 9.8, 1200, (v) =>
@@ -134,12 +117,9 @@ const StatsSection = () => {
             );
             animateValue(setUsersCount, 0, 500, 1600, (v) => Math.floor(v));
           } else {
-            // when leaving viewport, reset flags so it can replay on re-entry
             startedRef.current = false;
-            // cancel any animations
             rafIdsRef.current.forEach((i) => cancelAnimationFrame(i));
             rafIdsRef.current = [];
-            // reset counters to zero for consistent replay
             setClientsCount(0);
             setReviewsCount(0);
             setRatingValue(0);
@@ -180,7 +160,7 @@ const StatsSection = () => {
     };
   }, [isDragging, dragStart]);
 
-  // Smooth animation loop (lerp + inertia + idle auto-rotate)
+  // Smooth animation loop
   useEffect(() => {
     const animate = () => {
       const idle =
@@ -200,7 +180,7 @@ const StatsSection = () => {
 
   return (
     <section ref={sectionRef} className="w-full bg-[#183942] py-12 lg:py-20">
-      <div className="  max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header & description */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="h-px w-24 bg-[#ffffff7c] mx-auto mb-6" />
@@ -214,28 +194,20 @@ const StatsSection = () => {
           </p>
         </div>
 
-        {/* Simple Bay Window Carousel */}
-        {/* Simple Bay Window Carousel */}
-        {/* Simple Bay Window Carousel */}
+        {/* Responsive Bay Window Carousel */}
         <div className="mb-16 w-full flex justify-center">
           <div
             className="relative"
             style={{
-              perspective: "2000px",
-              width: window.matchMedia("(max-width: 768px)").matches
-                ? "min(90vw, 600px)" // Narrower width for mobile
-                : window.matchMedia("(max-width: 1400px)").matches
-                  ? "min(800px, 100vw)"
-                  : "min(900px, 100vw)",
-              height: window.matchMedia("(max-width: 768px)").matches
-                ? "min(80vw, 450px)" // Taller height for mobile (4:3 aspect ratio)
-                : window.matchMedia("(max-width: 1400px)").matches
-                  ? "min(360px, 70vh)"
-                  : "min(450px, 60vh)",
-              WebkitMaskImage:
-                "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
-              maskImage:
-                "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
+              perspective: isMobile ? "350px" : "2000px",
+              width: isMobile ? "100%" : "min(900px, 100vw)",
+              height: isMobile ? "190px" : "min(450px, 60vh)",
+              WebkitMaskImage: isMobile
+                ? "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 5%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 90%, rgba(0,0,0,0.8) 95%, rgba(0,0,0,0) 100%)"
+                : "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
+              maskImage: isMobile
+                ? "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 5%, rgba(0,0,0,1) 10%, rgba(0,0,0,1) 90%, rgba(0,0,0,0.8) 95%, rgba(0,0,0,0) 100%)"
+                : "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
               overflow: "visible",
             }}
           >
@@ -249,18 +221,21 @@ const StatsSection = () => {
               onTouchStart={handleMouseDown}
             >
               {projectImages.map((image, index) => {
-                const isMobile =
-                  window.matchMedia("(max-width: 768px)").matches;
-                const angleStep = isMobile ? 36 : 45; // Slightly wider spacing for mobile
+                // Mobile configuration - much wider spacing to show one full image
+                const angleStep = isMobile ? 90 : 45; // 90 degrees = only show one image at a time on mobile
                 const angle = index * -angleStep;
-                const z = isMobile ? -400 : -700; // Shallower depth for mobile
-                const originZ = isMobile ? 200 : 350; // Adjusted transform origin
-                const scale = isMobile ? 0.9 : 0.92; // Slightly smaller scale for mobile
+                const z = isMobile ? -200 : -700; // Much closer to camera on mobile
+                const originZ = isMobile ? 100 : 350; // Adjusted transform origin
+                const scale = isMobile ? 0.9 : 0.92; // Full scale on mobile
+
+                // Mobile: Calculate width and height to be more rectangular
+                const mobileWidth = isMobile ? "136vw" : "100%";
+                const mobileHeight = isMobile ? "360px" : "100%";
 
                 return (
                   <div
                     key={index}
-                    className={`absolute inset-0 transition-opacity duration-300 ease-out rounded-lg overflow-hidden shadow-md ${
+                    className={`absolute transition-opacity duration-300 ease-out rounded-lg overflow-hidden shadow-xl ${
                       hoveredIndex !== null
                         ? hoveredIndex === index
                           ? "opacity-100"
@@ -275,6 +250,14 @@ const StatsSection = () => {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backfaceVisibility: "hidden",
+                      // Mobile: Set explicit dimensions for rectangle shape
+                      width: mobileWidth,
+                      height: mobileHeight,
+                      left: isMobile ? "10%" : "0",
+                      top: isMobile ? "30%" : "0",
+                      marginLeft: isMobile ? "-42.5vw" : "0", // Center the image
+                      marginTop: isMobile ? "-110px" : "0", // Center vertically
+                      inset: isMobile ? "auto" : "0",
                     }}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}

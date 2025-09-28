@@ -4,7 +4,7 @@ import separatorImg from "/images/sun.svg"; // adjust path
 const FixedRibbon = ({ servicesList }) => {
   // create repeated list to enable seamless marquee loop
   const items = servicesList.map((service, index) => (
-    <React.Fragment key={"item-"+index}>
+    <React.Fragment key={"item-" + index}>
       <span className="text-[18px] sm:text-[20px] md:text-[24px] font-medium leading-[22px] sm:leading-[26px] md:leading-[30px] text-left text-white font-inter whitespace-nowrap">
         {service}
       </span>
@@ -33,7 +33,6 @@ const FixedRibbon = ({ servicesList }) => {
 // Usage with default list if no prop is passed
 FixedRibbon.defaultProps = {
   servicesList: [
-    "Green the planet",
     "Web Development",
     "App Development",
     "Digital Marketing",

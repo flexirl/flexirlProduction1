@@ -70,7 +70,7 @@ const ScrollText = () => {
   return (
     <section
       ref={containerRef}
-      className="relative pb-6 md:pb-8 lg:pb-10 px-4 sm:px-8 overflow-hidden -mt-[15vh] md:-mt-[18vh] lg:-mt-[20vh]"
+      className="relative pb-6 md:pb-8 lg:pb-10 px-4 sm:px-8 overflow-hidden -mt-[70vh] md:-mt-[77vh] lg:-mt-[70vh] xs:-mt-[70vh]"
     >
       <style>
         {`
@@ -81,7 +81,7 @@ const ScrollText = () => {
             font-weight: 250;
               text-transform: uppercase;
             letter-spacing: -0.07em;
-            line-height: .54;
+            line-height: .67;
             padding: 0.8rem 0;
             user-select: none;
             will-change: transform, color;

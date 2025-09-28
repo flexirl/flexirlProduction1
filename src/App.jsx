@@ -14,10 +14,10 @@ import ImagineHandSection from "./pages/Home/ImagineHandSection";
 import { StyledFixedNavigation } from "./components/common/FixedNavigation";
 import Hellosection from "./pages/Home/Hellosection";
 import Fixedribbon from "./components/Fixedribbon";
-import Formslide from "./components/ui/FormSlide";
+
 import { Helmet } from "react-helmet";
 import CtaWithTheme from "./components/ui/CtaWithTheme";
-import DesignStareScroll from "./components/ui/DesignStareScroll";
+// import DesignStareScroll from "./components/ui/DesignStareScroll";
 import ScrollText from "./components/ui/ScrollText";
 import FounderSection from "./pages/Home/FounderSection";
 
@@ -75,7 +75,7 @@ function App() {
             <ServicesSection />
           </div>
 
-          <div className="-mt-8">
+          <div>
             <ScrollText />
           </div>
 
@@ -83,8 +83,6 @@ function App() {
           <div id="projects">
             <BestWorksSection />
             <StatsSection />
-
-          
           </div>
 
           {/* Testimonials */}

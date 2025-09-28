@@ -48,8 +48,11 @@ const ServiceGridWithStackingCards = () => {
   }, []);
 
   return (
-    <section className="w-full pt-8 sm:pt-10 md:pt-12 lg:pt-16 xl:pt-18 2xl:pt-18 pb-0 min-h-[120vh] md:min-h-[140vh] lg:min-h-[160vh] xl:min-h-[170vh]">
-      <div className="relative mx-auto w-[min(92vw,720px)] mt-2 sm:mt-4 md:mt-6 lg:mt-6 xl:mt-8 2xl:mt-10" ref={stackRef}>
+    <section className="w-full lg:mt-40 pt-8 sm:pt-10 md:pt-12 lg:pt-16 xl:pt-18 2xl:pt-18 pb-0  min-h-[120vh] md:min-h-[140vh] lg:min-h-[160vh] xl:min-h-[170vh]">
+      <div
+        className="relative mx-auto w-[min(92vw,720px)] mt-2 sm:mt-4 md:mt-6 lg:mt-6 xl:mt-8 2xl:mt-10"
+        ref={stackRef}
+      >
         <div className="grid" style={{ gridTemplateAreas: '"stack"' }}>
           {/* Card 1 */}
           <div
@@ -61,16 +64,21 @@ const ServiceGridWithStackingCards = () => {
             </h3>
             <ul className="text-sm sm:text-base md:text-lg space-y-2 opacity-90 list-disc pl-5">
               <li>
-                Product Development — We build intuitive websites and apps backed by strong UX and engineering practices to create experiences users love.
+                Product Development — We build intuitive websites and apps
+                backed by strong UX and engineering practices to create
+                experiences users love.
               </li>
               <li>
-                Product Design — Visual systems and brand assets that are consistent, usable, and conversion-driven.
+                Product Design — Visual systems and brand assets that are
+                consistent, usable, and conversion-driven.
               </li>
               <li>
-                Digital Marketing — Social, content, and SEO strategies that boost awareness, engagement, and conversions.
+                Digital Marketing — Social, content, and SEO strategies that
+                boost awareness, engagement, and conversions.
               </li>
               <li>
-                Video & Motion Graphics — Explainers and motion design that communicate clearly and memorably.
+                Video & Motion Graphics — Explainers and motion design that
+                communicate clearly and memorably.
               </li>
             </ul>
           </div>

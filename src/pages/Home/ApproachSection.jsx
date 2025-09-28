@@ -20,12 +20,22 @@ const AboutSection = () => {
 
   const itemLg = {
     hidden: { opacity: 0, x: 30, y: 8 },
-    visible: { opacity: 1, x: 0, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   const itemSm = {
     hidden: { opacity: 0, y: 20, scale: 0.98 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   return (
@@ -50,23 +60,23 @@ const AboutSection = () => {
                 </h2>
 
                 {/* Description text */}
-                <div className="text-[13px] mt-2 sm:text-[14px] md:text-[15px] font-normal leading-[18px] sm:leading-[20px] md:leading-[22px] text-center text-[#1e1e1e] font-syne w-full">
+                <div className="text-[13px] mt-4 sm:text-[14px] md:text-[15px] font-normal leading-[18px] sm:leading-[20px] md:leading-[22px] text-center text-[#1e1e1e] font-syne w-full">
                   <p className="mb-4">
-                    <span className="font-normal">
+                    <span className="font-regular">
                       At Flexirl, we believe technology should be simple, smart,
                       and scalable. We help businesses harness the power of
-                      digital solutions to grow faster, connect better, and stand
-                      out in a crowded market. We do not just build — we listen,
-                      analyze, and innovate. Our team dives deep into your
-                      business goals and customer journeys to craft tailored
-                      digital strategies that actually deliver results.
+                      digital solutions to grow faster, connect better, and
+                      stand out in a crowded market. We do not just build — we
+                      listen, analyze, and innovate. Our team dives deep into
+                      your business goals and customer journeys to craft
+                      tailored digital strategies that actually deliver results.
                     </span>
                   </p>
                   <p className="mb-4">
-                    <span className="font-normal">
+                    <span className="font-regular">
                       Opportunities are discovered, nurtured, and amplified
                       through modern tech solutions, creative design, and
-                      data-driven strategies. 
+                      data-driven strategies.
                     </span>
                     <span className="font-bold">
                       From websites and mobile apps to social media, marketing,
@@ -76,10 +86,10 @@ const AboutSection = () => {
                   </p>
                   <p>
                     <span className="font-bold">
-                      Our prototype-driven, iterative model ensures every solution
-                      we deliver is tested, refined, and perfected for real-world
-                      impact. With Flexirl, your brand does not just adapt to
-                      digital transformation — it leads it.
+                      Our prototype-driven, iterative model ensures every
+                      solution we deliver is tested, refined, and perfected for
+                      real-world impact. With Flexirl, your brand does not just
+                      adapt to digital transformation — it leads it.
                     </span>
                   </p>
                 </div>
@@ -103,7 +113,10 @@ const AboutSection = () => {
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full relative z-10"
               >
                 {/* Discover */}
-                <motion.div variants={isLg ? itemLg : itemSm} className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm">
+                <motion.div
+                  variants={isLg ? itemLg : itemSm}
+                  className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm"
+                >
                   <img
                     src={discover}
                     alt="Discover process"
@@ -122,7 +135,10 @@ const AboutSection = () => {
                 </motion.div>
 
                 {/* Design */}
-                <motion.div variants={isLg ? itemLg : itemSm} className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm">
+                <motion.div
+                  variants={isLg ? itemLg : itemSm}
+                  className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm"
+                >
                   <div className="flex items-center justify-between w-full z-10">
                     <div className="flex flex-col gap-2">
                       <h3 className="text-[18px] sm:text-[20px] md:text-[22px] font-bold text-black font-inter">
@@ -142,7 +158,10 @@ const AboutSection = () => {
                 </motion.div>
 
                 {/* Deploy */}
-                <motion.div variants={isLg ? itemLg : itemSm} className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm">
+                <motion.div
+                  variants={isLg ? itemLg : itemSm}
+                  className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm"
+                >
                   <img
                     src={deploy}
                     alt="Deploy process"
@@ -159,7 +178,10 @@ const AboutSection = () => {
                 </motion.div>
 
                 {/* Deliver Growth */}
-                <motion.div variants={isLg ? itemLg : itemSm} className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm">
+                <motion.div
+                  variants={isLg ? itemLg : itemSm}
+                  className="relative bg-white border border-[#e8e8e8] rounded-lg p-4 sm:p-6 min-h-[140px] flex flex-col justify-between shadow-sm"
+                >
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets%2F1fcc1bf089804dbcb25502fab34b5e07%2F8b21c16fd54142c2832ba50711afb645?format=webp&width=800"
                     alt="Deliver growth"

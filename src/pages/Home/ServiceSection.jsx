@@ -1,6 +1,6 @@
 import React from "react";
 import girl from "/images/girl.png";
-import reddot from "/images/deco.png";
+import reddot from "/images/reddot.svg";
 import Stackcard from "./Stackcard";
 import ScrollText from "../../components/ui/ScrollText";
 import arrow from "/images/arrowservices.svg";
@@ -8,18 +8,18 @@ import arrow from "/images/arrowservices.svg";
 const ServicesSection = () => {
   return (
     <section
-      className="w-full max-h-fit  bg-[#f8f8f8] 
+      className="w-full   bg-[#f8f8f8]  
      "
     >
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20">
         {/* Header row: intro + visual */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black font-syne mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black font-inter_28pt mb-4 ">
               <span className="block font-bold">Our</span>
-              <span className="block font-extrabold">services</span>
+              <span className="block font-extrabold ">services</span>
             </h2>
-            <p className="text-sm sm:text-base md:text-lg text-gray-800 font-syne max-w-prose">
+            <p className="text-sm sm:text-base md:text-lg text-gray-800 font-syne font-regular max-w-prose">
               We craft engaging, authentic, and effective services to help your
               business grow. From product development to motion graphics, we
               blend creativity with strategy to deliver measurable results.
@@ -30,18 +30,18 @@ const ServicesSection = () => {
           </div>
 
           <div className="lg:col-span-7 block">
-            <div className="relative w-full h-[220px] sm:h-[300px] md:h-[360px] lg:h-[420px]">
+            <div className="relative w-full h-[220px] sm:h-[30px] md:h-[360px] lg:h-[420px]">
               <img
                 src={girl}
                 alt="Team member"
-                className="absolute right-0 top-0 w-full h-full object-cover max-w-[520px] ml-auto"
+                className="absolute right-0 top-0 w-full h-full  max-w-[520px] ml-auto"
               />
               <div className="absolute left-0 top-0 w-full h-full bg-gradient-to-b from-transparent to-[#f8f8f8] pointer-events-none" />
-              <img
+              {/* <img
                 src={reddot}
                 alt="Decor"
-                className="absolute left-6 top-6 w-12 opacity-70"
-              />
+                className="absolute  left-72 top-32 w-12 opacity-100"
+              /> */}
             </div>
             {/* Arrow below image for mobile/tablet
             <div className="flex justify-center mt-4 lg:mt-6">

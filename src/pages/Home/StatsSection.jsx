@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import a from "/images/a.jpg";
 import b from "/images/ab.png";
+//import c from "/images/abc.png";
+import d from "/images/abc.png";
+import e from "/images/abcd.png";
+import f from "/images/abcdef.png";
+import g from "/images/pro1.jpg";
 
 const StatsSection = () => {
   const sectionRef = useRef(null);
@@ -25,7 +30,7 @@ const StatsSection = () => {
   const rafRef = useRef(null);
 
   // Project images
-  const projectImages = [a, b, a, b, a, b, a, b, a, b, a, b];
+  const projectImages = [d, a, g, f, e, d, a, f, d, g, e, a, d];
 
   const getBgPosition = (index) => {
     const wrappedRotation = (((rotation - 50 - index * 36) % 360) + 360) % 360;
@@ -38,9 +43,9 @@ const StatsSection = () => {
     autoRotateRef.current = setInterval(() => {
       const timeSinceLastInteraction = Date.now() - lastInteractionRef.current;
       if (timeSinceLastInteraction > 2000 && !isDragging) {
-        setRotation((prev) => prev + 0.15);
+        setRotation((prev) => prev + 0.3);
       }
-    }, 16);
+    }, 26);
   };
 
   const stopAutoRotation = () => {
@@ -200,7 +205,7 @@ const StatsSection = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="h-px w-24 bg-[#ffffff7c] mx-auto mb-6" />
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight">
-            Projects To Stare
+            Projects To Impact
           </h2>
           <p className="mt-6 text-sm sm:text-base md:text-lg text-white/90 leading-relaxed">
             We create the most stunning graphic designs for your social media,
@@ -210,25 +215,28 @@ const StatsSection = () => {
         </div>
 
         {/* Simple Bay Window Carousel */}
+        {/* Simple Bay Window Carousel */}
+        {/* Simple Bay Window Carousel */}
         <div className="mb-16 w-full flex justify-center">
           <div
             className="relative"
             style={{
-              perspective: "1700px",
-              width:
-                window.matchMedia &&
-                window.matchMedia("(max-width: 1400px)").matches
+              perspective: "2000px",
+              width: window.matchMedia("(max-width: 768px)").matches
+                ? "min(90vw, 600px)" // Narrower width for mobile
+                : window.matchMedia("(max-width: 1400px)").matches
                   ? "min(800px, 100vw)"
-                  : "min(530px, 100vw)",
-              height:
-                window.matchMedia &&
-                window.matchMedia("(max-width: 1400px)").matches
+                  : "min(900px, 100vw)",
+              height: window.matchMedia("(max-width: 768px)").matches
+                ? "min(80vw, 450px)" // Taller height for mobile (4:3 aspect ratio)
+                : window.matchMedia("(max-width: 1400px)").matches
                   ? "min(360px, 70vh)"
                   : "min(450px, 60vh)",
               WebkitMaskImage:
                 "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
               maskImage:
                 "linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 8%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0.7) 92%, rgba(0,0,0,0) 100%)",
+              overflow: "visible",
             }}
           >
             <div
@@ -242,26 +250,30 @@ const StatsSection = () => {
             >
               {projectImages.map((image, index) => {
                 const isMobile =
-                  window.matchMedia &&
                   window.matchMedia("(max-width: 768px)").matches;
-                const angleStep = isMobile ? 32 : 36; // mobile increased gap; preserve previous desktop angle
+                const angleStep = isMobile ? 36 : 45; // Slightly wider spacing for mobile
                 const angle = index * -angleStep;
-                const z = isMobile ? -420 : -650;
-                const originZ = isMobile ? 200 : 100;
-                const scale = isMobile ? 0.94 : 1;
+                const z = isMobile ? -400 : -700; // Shallower depth for mobile
+                const originZ = isMobile ? 200 : 350; // Adjusted transform origin
+                const scale = isMobile ? 0.9 : 0.92; // Slightly smaller scale for mobile
+
                 return (
                   <div
                     key={index}
-                    className={`absolute inset-0 transition-opacity duration-300 ease-out rounded-lg overflow-hidden shadow-md
-                      ${hoveredIndex !== null ? (hoveredIndex === index ? "opacity-100" : "opacity-70") : "opacity-100"}
-                    `}
+                    className={`absolute inset-0 transition-opacity duration-300 ease-out rounded-lg overflow-hidden shadow-md ${
+                      hoveredIndex !== null
+                        ? hoveredIndex === index
+                          ? "opacity-100"
+                          : "opacity-70"
+                        : "opacity-100"
+                    }`}
                     style={{
                       transformStyle: "preserve-3d",
                       transform: `rotateY(${angle}deg) translateZ(${z}px) scale(${scale})`,
                       transformOrigin: `50% 50% ${originZ}px`,
                       backgroundImage: `url(${image})`,
                       backgroundSize: "cover",
-                      backgroundPosition: getBgPosition(index),
+                      backgroundPosition: "center",
                       backfaceVisibility: "hidden",
                     }}
                     onMouseEnter={() => setHoveredIndex(index)}

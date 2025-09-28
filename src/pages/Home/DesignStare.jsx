@@ -8,6 +8,12 @@ import {
   Texture,
   Transform,
 } from "ogl";
+import udesign from "/images/udesign.png";
+import ttdesign from "/images/ttdesign.png";
+import Fdesign from "/images/Fdesign.png";
+import Edesign from "/images/Edesign.png";
+import Tdesign from "/images/Tdesign.png";
+import Ddesign from "/images/d5.jpg";
 import { useEffect, useRef } from "react";
 
 function debounce(func, wait) {
@@ -370,52 +376,28 @@ class App {
   createMedias(items, bend = 1, textColor, borderRadius, font) {
     const defaultItems = [
       {
-        image: a,
-        text: "Bridge",
+        image: udesign,
+        text: "",
       },
       {
-        image: `https://picsum.photos/seed/2/800/600?grayscale`,
-        text: "Desk Setup",
+        image: Ddesign,
+        text: "",
       },
       {
-        image: `https://picsum.photos/seed/3/800/600?grayscale`,
-        text: "Waterfall",
+        image: ttdesign,
+        text: "",
       },
       {
-        image: `https://picsum.photos/seed/4/800/600?grayscale`,
-        text: "Strawberries",
+        image: Edesign,
+        text: "",
       },
+      // {
+      //   image: Fdesign,
+      //   text: "",
+      // },
       {
-        image: `https://picsum.photos/seed/5/800/600?grayscale`,
-        text: "Deep Diving",
-      },
-      {
-        image: `https://picsum.photos/seed/16/800/600?grayscale`,
-        text: "Train Track",
-      },
-      {
-        image: `https://picsum.photos/seed/17/800/600?grayscale`,
-        text: "Santorini",
-      },
-      {
-        image: `https://picsum.photos/seed/8/800/600?grayscale`,
-        text: "Blurry Lights",
-      },
-      {
-        image: `https://picsum.photos/seed/9/800/600?grayscale`,
-        text: "New York",
-      },
-      {
-        image: `https://picsum.photos/seed/10/800/600?grayscale`,
-        text: "Good Boy",
-      },
-      {
-        image: `https://picsum.photos/seed/21/800/600?grayscale`,
-        text: "Coastline",
-      },
-      {
-        image: `https://picsum.photos/seed/12/800/600?grayscale`,
-        text: "Palm Trees",
+        image: Tdesign,
+        text: "",
       },
     ];
     const galleryItems = items && items.length ? items : defaultItems;

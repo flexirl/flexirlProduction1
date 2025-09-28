@@ -88,11 +88,11 @@ export function InfiniteMovingCards({
               </div>
 
               {/* Larger avatar shown on md+ to balance layout */}
-              <img
+              {/* <img
                 src={item.avatar}
                 alt={item.name}
                 className="hidden md:block w-12 h-12 rounded-full object-cover ml-3 flex-shrink-0"
-              />
+              /> */}
             </div>
 
             {/* Content */}
@@ -110,7 +110,9 @@ export function InfiniteMovingCards({
 
               <div className="flex flex-col text-center md:text-left">
                 <span className="text-sm font-medium">{item.name}</span>
-                <span className="text-[11px] sm:text-xs opacity-80">{item.role}</span>
+                <span className="text-[11px] sm:text-xs opacity-80">
+                  {item.role}
+                </span>
               </div>
             </div>
           </div>
